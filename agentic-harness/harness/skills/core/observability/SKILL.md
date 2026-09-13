@@ -1,1122 +1,561 @@
-# \# Observability
+# Observability
 
-# 
+## Purpose
 
-# \## Purpose
+Provide reusable governance-observability guidance for the governed agentic delivery harness.
 
-# 
+This skill supports Monitor recording, iteration/verdict history, escalation status, timestamps, evidence references, and available telemetry.
 
-# Provide reusable governance-observability guidance for the governed agentic delivery harness.
+It is intentionally application- and technology-agnostic.
 
-# 
+It does not define application business rules, application architecture rules, technology-specific implementation conventions, governance thresholds, orchestration statuses, retry/escalation policy, deployment controls, rollback controls, or reflection.
 
-# This skill supports Monitor recording, iteration/verdict history, escalation status, timestamps, evidence references, and available telemetry.
+Those concerns remain owned by the applicable configuration, governance policy, orchestration contract, agent definitions, deployment lifecycle, and reflection artifact.
 
-# 
+---
 
-# It is intentionally application- and technology-agnostic.
+## Scope
 
-# 
+This skill applies when the harness records execution history and governance-observability evidence.
 
-# It does not define application business rules, application architecture rules, technology-specific implementation conventions, governance thresholds, orchestration statuses, retry/escalation policy, deployment controls, rollback controls, or reflection.
+Observability information must be derived from authoritative inputs:
 
-# 
+```text
+Approved Sprint Contract
+Current Generator Iteration Evidence
+Current Evaluator Iteration Evidence
+Prior Iteration Evidence (when applicable)
+Escalation Evidence (when applicable)
+Resolved Configuration Reference
+Harness Execution Metadata
+```
 
-# Those concerns remain owned by the applicable configuration, governance policy, orchestration contract, agent definitions, deployment lifecycle, and reflection artifact.
+Detailed deterministic evaluation evidence remains authoritative in:
 
-# 
+```text
+evaluator-feedback-iteration-N.md
+```
 
-# \---
+Detailed implementation evidence remains authoritative in:
 
-# 
+```text
+generator-summary-iteration-N.md
+```
 
-# \## Scope
+Observability may summarize or reference these evidence artifacts without duplicating their complete content.
 
-# 
+---
 
-# This skill applies when the harness records execution history and governance-observability evidence.
+## Observability Principles
 
-# 
+Observability must be:
 
-# Observability information must be derived from authoritative inputs:
+- evidence-based;
+- derived from authoritative canonical evidence and harness execution metadata;
+- traceable to the approved sprint contract;
+- non-invasive;
+- immutable with respect to previously recorded facts;
+- clearly labeled where a value is unavailable; and
+- restricted to Monitor's responsibility boundary.
 
-# 
+Observability must not:
 
-# ```text
+- issue evaluation verdicts;
+- reinterpret Evaluator verdicts;
+- modify Generator, Evaluator, contract, or escalation evidence;
+- introduce new verification rules;
+- introduce governance thresholds;
+- introduce orchestration states;
+- authorize retries or escalation;
+- fabricate telemetry;
+- extrapolate unavailable telemetry;
+- promote informational observations into governance decisions; or
+- replace CI/CD independent revalidation.
 
-# Approved Sprint Contract
+---
 
-# Current Generator Iteration Evidence
+## Observability Inputs
 
-# Current Evaluator Iteration Evidence
+Observability information is derived only from authoritative inputs.
 
-# Prior Iteration Evidence (when applicable)
+### Canonical Evidence
 
-# Escalation Evidence (when applicable)
+```text
+sprint-N-contract.md
+generator-summary-iteration-N.md
+evaluator-feedback-iteration-N.md
+prior iteration evidence
+escalation.md (when applicable)
+```
 
-# Resolved Configuration Reference
+### Reference Artifacts
 
-# Harness Execution Metadata
+```text
+resolved-config.yaml
+spec.md (reference for traceability)
+```
 
-# ```
+### Harness Execution Metadata
 
-# 
+```text
+Run ID
+Sprint ID
+Contract ID
+Current Iteration
+Iterations Used
+Current Sprint Status
+Timestamps
+Token Usage (when available)
+Estimated Cost (when available)
+Retry / Escalation Decisions (as determined by the harness)
+```
 
-# Detailed deterministic evaluation evidence remains authoritative in:
+Observability must not require:
 
-# 
+- the complete application source tree;
+- unrelated domain packs;
+- unrelated technology packs;
+- Generator implementation reasoning;
+- Evaluator internal reasoning;
+- deployment evidence;
+- rollback evidence;
+- reflection content; or
+- an undefined persisted Run State artifact.
 
-# ```text
+---
 
-# evaluator-feedback-iteration-N.md
+## Verdict Preservation
 
-# ```
+Observability preserves Evaluator verdicts as recorded:
 
-# 
+```text
+PASS
+CONDITIONAL_PASS
+FAIL
+```
 
-# Detailed implementation evidence remains authoritative in:
+Observability must not:
+
+- issue verdicts;
+- reinterpret verdicts;
+- change a verdict outcome;
+- convert `CONDITIONAL_PASS` into a mandatory human-intervention state unless the active governance policy explicitly configures it;
+- determine whether another iteration is permitted;
+- determine whether escalation is required; or
+- treat `PASS` or `CONDITIONAL_PASS` as final for the run when additional approved sprints remain.
 
-# 
+Routing after the verdict is controlled by the harness.
 
-# ```text
+---
 
-# generator-summary-iteration-N.md
+## Iteration Recording
 
-# ```
+Observability records information for each Generator/Evaluator iteration independently.
 
-# 
+Canonical iteration evidence used as reference:
 
-# Observability may summarize or reference these evidence artifacts without duplicating their complete content.
+```text
+generator-summary-iteration-N.md
+evaluator-feedback-iteration-N.md
+```
 
-# 
+For each iteration, observability records:
 
-# \---
+```text
+Iteration Number
+Evaluator Verdict
+Findings Summary or Reference
+Available Quality Evidence Summary or Reference
+Escalation Status
+Timestamp
+Evidence References
+```
 
-# 
+Prior iteration records must not be overwritten.
 
-# \## Observability Principles
+The observability record must preserve iteration ordering.
 
-# 
+---
 
-# Observability must be:
+## Sprint Recording
 
-# 
+A sprint outcome is recorded after the harness determines the sprint has concluded.
 
-# \- evidence-based;
+Observability records:
 
-# \- derived from authoritative canonical evidence and harness execution metadata;
+```text
+Run ID
+Sprint ID
+Contract ID
+Iterations Used
+Final Evaluator Verdict
+Escalation Status
+Evidence References
+Timestamp
+```
 
-# \- traceable to the approved sprint contract;
+Observability must not independently determine sprint completion.
 
-# \- non-invasive;
+Sprint progression, escalation, and run completion decisions remain with the harness and governance policy.
 
-# \- immutable with respect to previously recorded facts;
+---
 
-# \- clearly labeled where a value is unavailable; and
+## Run Log
 
-# \- restricted to Monitor's responsibility boundary.
+Where the harness records execution history in:
 
-# 
+```text
+run-log.md
+```
 
-# Observability must not:
+observability supports the fields required by the active baseline and resolved configuration.
 
-# 
+At minimum, `run-log.md` should record sufficient information to reconstruct the governed execution history, including:
 
-# \- issue evaluation verdicts;
+```text
+Run ID
+Sprint ID
+Contract ID
+Iteration Number
+Iterations Used
+Evaluator Verdict
+Findings / Violations Summary or Evidence Reference
+Escalation Status
+Timestamp
+Generator Evidence Reference
+Evaluator Evidence Reference
+Sprint Contract Reference
+```
 
-# \- reinterpret Evaluator verdicts;
+Where available and required by the resolved configuration, `run-log.md` may also record:
 
-# \- modify Generator, Evaluator, contract, or escalation evidence;
+```text
+Coverage Result
+Other Quality Results
+Token Usage
+Estimated Cost
+```
 
-# \- introduce new verification rules;
+Detailed deterministic quality evidence remains authoritative in `evaluator-feedback-iteration-N.md`.
 
-# \- introduce governance thresholds;
+Observability should summarize or reference that evidence rather than duplicate the complete Evaluator report.
 
-# \- introduce orchestration states;
+Prior `run-log.md` entries must not be overwritten. Where the harness supports appending or preserving iteration entries in a single `run-log.md` file, existing entries must remain unchanged when new iteration or sprint entries are added.
 
-# \- authorize retries or escalation;
+Runtime evidence filenames and paths remain owned by the harness baseline and resolved configuration. This skill does not redefine them.
 
-# \- fabricate telemetry;
+---
 
-# \- extrapolate unavailable telemetry;
+## Available Telemetry
 
-# \- promote informational observations into governance decisions; or
+Observability records only telemetry that is actually available from harness execution metadata or canonical evidence.
 
-# \- replace CI/CD independent revalidation.
+Examples include:
 
-# 
+```text
+Iteration Number
+Iterations Used
+Evaluator Verdict
+Findings Count
+Escalation Status
+Token Usage (when available)
+Estimated Cost (when available)
+Timestamp
+```
 
-# \---
+When a metric is unavailable, record:
 
-# 
+```text
+N/A
+```
 
-# \## Observability Inputs
+Observability must not:
 
-# 
+- infer token usage;
+- estimate cost without an available source;
+- fabricate performance metrics;
+- fabricate quality trends;
+- convert semantic observations into unsupported quantitative metrics;
+- assign numeric values to qualitative outcomes; or
+- represent expected behavior as observed behavior.
 
-# Observability information is derived only from authoritative inputs.
+Quality trends may be recorded only when they can be derived from actual evidence across preserved iterations or runs. Trend statements without supporting evidence must not be recorded.
 
-# 
+---
 
-# \### Canonical Evidence
+## Timestamps
 
-# 
+Observability records timestamps derived from harness execution metadata where available.
 
-# ```text
+Timestamp formatting follows the resolved harness configuration.
 
-# sprint-N-contract.md
+This skill does not define:
 
-# generator-summary-iteration-N.md
+```text
+Time Zone
+Date/Time Format
+Clock Source
+Scheduling Mechanism
+```
 
-# evaluator-feedback-iteration-N.md
+Feature-specific or application-specific time behavior remains outside this skill.
 
-# prior iteration evidence
+---
 
-# escalation.md (when applicable)
+## Escalation Recording
 
-# ```
+Observability records escalation status when the harness has determined escalation.
 
-# 
+Canonical escalation evidence, when produced, is referenced as:
 
-# \### Reference Artifacts
+```text
+escalation.md
+```
 
-# 
+For a recorded escalation, observability captures:
 
-# ```text
+```text
+Run ID
+Sprint ID
+Contract ID
+Iteration
+Final Evaluator Verdict
+Escalation Status
+Escalation Evidence Reference
+Timestamp
+```
 
-# resolved-config.yaml
+Observability must not:
 
-# spec.md (reference for traceability)
+- initiate escalation policy;
+- change the configured iteration limit;
+- authorize another Generator iteration;
+- resolve the escalation; or
+- modify escalation evidence.
 
-# ```
+---
 
-# 
+## Evidence Preservation
 
-# \### Harness Execution Metadata
+Observability preserves the relationships among canonical execution artifacts.
 
-# 
+The expected evidence relationship is:
 
-# ```text
+```text
+resolved-config.yaml
+spec.md
+   ↓
+sprint-N-contract.md
+   ↓
+generator-summary-iteration-1.md
+   ↓
+evaluator-feedback-iteration-1.md
+   ↓
+generator-summary-iteration-2.md (if applicable)
+   ↓
+evaluator-feedback-iteration-2.md (if applicable)
+   ↓
+run-log.md
+   ↓
+escalation.md (if applicable)
+```
 
-# Run ID
+The harness determines output and archive locations.
 
-# Sprint ID
+This skill does not assume ownership of creating or relocating run-level artifacts such as:
 
-# Contract ID
+```text
+resolved-config.yaml
+spec.md
+```
 
-# Current Iteration
+unless the harness explicitly assigns that responsibility.
 
-# Iterations Used
+Observability records references to these artifacts rather than modifying them.
 
-# Current Sprint Status
+---
 
-# Timestamps
+## Immutability
 
-# Token Usage (when available)
+Observability must preserve auditability.
 
-# Estimated Cost (when available)
+Do not:
 
-# Retry / Escalation Decisions (as determined by the harness)
+- overwrite prior iteration records;
+- alter Generator evidence;
+- alter Evaluator evidence;
+- alter escalation evidence;
+- delete prior evidence;
+- rewrite historical `run-log.md` entries;
+- change previously recorded verdicts; or
+- retroactively modify recorded metrics.
 
-# ```
+Corrections must be recorded as new evidence rather than as modifications to prior evidence.
 
-# 
+Where the resolved configuration defines an immutable review archive, existing entries within that archive must remain unchanged after they are recorded.
 
-# Observability must not require:
+---
 
-# 
+## Downstream Evidence Use
 
-# \- the complete application source tree;
+Observability evidence supports governance traceability for downstream lifecycle activities.
 
-# \- unrelated domain packs;
+The relationship is:
 
-# \- unrelated technology packs;
+```text
+Observability Evidence
+   ↓
+Audit / Traceability
+```
 
-# \- Generator implementation reasoning;
+CI/CD remains an independent validation activity:
 
-# \- Evaluator internal reasoning;
+```text
+Committed Revision
+   ↓
+CI/CD Independent Revalidation
+```
 
-# \- deployment evidence;
+Observability evidence does not replace CI/CD verification.
 
-# \- rollback evidence;
+Deployment, runtime validation, rollback, and reflection may reference governance evidence produced during the harness run, but this skill does not participate in those activities.
 
-# \- reflection content; or
+Deployment and rollback evidence remain owned by:
 
-# \- an undefined persisted Run State artifact.
+```text
+DEPLOYMENT.md
+```
 
-# 
+Reflection remains owned by:
 
-# \---
+```text
+REFLECTION.md
+```
 
-# 
+---
 
-# \## Verdict Preservation
+## Context Isolation
 
-# 
+Observability requires only the context needed to record and reference governance-observability evidence.
 
-# Observability preserves Evaluator verdicts as recorded:
+Do not require:
 
-# 
+- the complete application source tree;
+- unrelated domain packs;
+- unrelated technology packs;
+- Generator internal reasoning beyond the current iteration evidence;
+- Evaluator internal reasoning beyond the current iteration evidence;
+- deployment evidence;
+- rollback evidence;
+- reflection content; or
+- an undefined persisted Run State artifact.
 
-# ```text
+Harness execution metadata is authoritative for run, sprint, contract, iteration, verdict, and escalation state.
 
-# PASS
+---
 
-# CONDITIONAL\_PASS
+## Responsibility Boundaries
 
-# FAIL
+This skill supports Monitor reasoning only.
 
-# ```
+It does not authorize any agent to:
 
-# 
+```text
+Plan Work
+Generate Implementation
+Modify Tests
+Perform Remediation
+Modify Contracts
+Modify Configuration
+Modify Governance Policy
+Change Verdicts
+Change Verdict Thresholds
+Change Scoring Weights
+Change Hard Gates
+Change Coverage Thresholds
+Change Iteration Limits
+Authorize Retries
+Initiate Escalation
+Emit Orchestration Statuses
+Execute CI/CD
+Deploy
+Perform Runtime Validation
+Rollback
+Reflect
+```
 
-# Observability must not:
+Monitor records governance-observability evidence.
 
-# 
+The harness controls downstream routing.
 
-# \- issue verdicts;
+---
 
-# \- reinterpret verdicts;
+## Configuration Ownership
 
-# \- change a verdict outcome;
+This skill must not duplicate authoritative values owned elsewhere.
 
-# \- convert `CONDITIONAL\_PASS` into a mandatory human-intervention state unless the active governance policy explicitly configures it;
+The following remain configuration- or governance-owned:
 
-# \- determine whether another iteration is permitted;
+```text
+Application Paths
+Technology Stack
+Build Commands
+Test Commands
+Coverage Commands
+Coverage Thresholds
+Static Analysis Commands
+Architecture Verification Commands
+Security Commands
+Hard Gates
+Scoring Dimensions
+Scoring Weights
+PASS Threshold
+CONDITIONAL_PASS Threshold
+Fail-Closed Policy
+maxIterations
+Approval Commands
+Output Paths
+Review Paths
+Deployment Controls
+Rollback Controls
+```
 
-# \- determine whether escalation is required; or
+This skill defines:
 
-# \- treat `PASS` or `CONDITIONAL\_PASS` as final for the run when additional approved sprints remain.
+```text
+Reusable Governance-Observability Guidance
+```
 
-# 
+Configuration defines:
 
-# Routing after the verdict is controlled by the harness.
+```text
+Applicable Runtime Values
+```
 
-# 
+Governance policy defines:
 
-# \---
+```text
+Evaluation and Decision Policy
+```
 
-# 
+Agent definitions and `CLAUDE.md` define:
 
-# \## Iteration Recording
+```text
+Orchestration and Routing
+```
 
-# 
+Evaluator evidence remains authoritative for:
 
-# Observability records information for each Generator/Evaluator iteration independently.
+```text
+Deterministic Quality Results
+```
 
-# 
+This skill supports:
 
-# Canonical iteration evidence used as reference:
+```text
+Recording
+Referencing
+Preserving
+```
 
-# 
-
-# ```text
-
-# generator-summary-iteration-N.md
-
-# evaluator-feedback-iteration-N.md
-
-# ```
-
-# 
-
-# For each iteration, observability records:
-
-# 
-
-# ```text
-
-# Iteration Number
-
-# Evaluator Verdict
-
-# Findings Summary or Reference
-
-# Available Quality Evidence Summary or Reference
-
-# Escalation Status
-
-# Timestamp
-
-# Evidence References
-
-# ```
-
-# 
-
-# Prior iteration records must not be overwritten.
-
-# 
-
-# The observability record must preserve iteration ordering.
-
-# 
-
-# \---
-
-# 
-
-# \## Sprint Recording
-
-# 
-
-# A sprint outcome is recorded after the harness determines the sprint has concluded.
-
-# 
-
-# Observability records:
-
-# 
-
-# ```text
-
-# Run ID
-
-# Sprint ID
-
-# Contract ID
-
-# Iterations Used
-
-# Final Evaluator Verdict
-
-# Escalation Status
-
-# Evidence References
-
-# Timestamp
-
-# ```
-
-# 
-
-# Observability must not independently determine sprint completion.
-
-# 
-
-# Sprint progression, escalation, and run completion decisions remain with the harness and governance policy.
-
-# 
-
-# \---
-
-# 
-
-# \## Run Log
-
-# 
-
-# Where the harness records execution history in:
-
-# 
-
-# ```text
-
-# run-log.md
-
-# ```
-
-# 
-
-# observability supports the fields required by the active baseline and resolved configuration.
-
-# 
-
-# At minimum, `run-log.md` should record sufficient information to reconstruct the governed execution history, including:
-
-# 
-
-# ```text
-
-# Run ID
-
-# Sprint ID
-
-# Contract ID
-
-# Iteration Number
-
-# Iterations Used
-
-# Evaluator Verdict
-
-# Findings / Violations Summary or Evidence Reference
-
-# Escalation Status
-
-# Timestamp
-
-# Generator Evidence Reference
-
-# Evaluator Evidence Reference
-
-# Sprint Contract Reference
-
-# ```
-
-# 
-
-# Where available and required by the resolved configuration, `run-log.md` may also record:
-
-# 
-
-# ```text
-
-# Coverage Result
-
-# Other Quality Results
-
-# Token Usage
-
-# Estimated Cost
-
-# ```
-
-# 
-
-# Detailed deterministic quality evidence remains authoritative in `evaluator-feedback-iteration-N.md`.
-
-# 
-
-# Observability should summarize or reference that evidence rather than duplicate the complete Evaluator report.
-
-# 
-
-# Prior `run-log.md` entries must not be overwritten. Where the harness supports appending or preserving iteration entries in a single `run-log.md` file, existing entries must remain unchanged when new iteration or sprint entries are added.
-
-# 
-
-# Runtime evidence filenames and paths remain owned by the harness baseline and resolved configuration. This skill does not redefine them.
-
-# 
-
-# \---
-
-# 
-
-# \## Available Telemetry
-
-# 
-
-# Observability records only telemetry that is actually available from harness execution metadata or canonical evidence.
-
-# 
-
-# Examples include:
-
-# 
-
-# ```text
-
-# Iteration Number
-
-# Iterations Used
-
-# Evaluator Verdict
-
-# Findings Count
-
-# Escalation Status
-
-# Token Usage (when available)
-
-# Estimated Cost (when available)
-
-# Timestamp
-
-# ```
-
-# 
-
-# When a metric is unavailable, record:
-
-# 
-
-# ```text
-
-# N/A
-
-# ```
-
-# 
-
-# Observability must not:
-
-# 
-
-# \- infer token usage;
-
-# \- estimate cost without an available source;
-
-# \- fabricate performance metrics;
-
-# \- fabricate quality trends;
-
-# \- convert semantic observations into unsupported quantitative metrics;
-
-# \- assign numeric values to qualitative outcomes; or
-
-# \- represent expected behavior as observed behavior.
-
-# 
-
-# Quality trends may be recorded only when they can be derived from actual evidence across preserved iterations or runs. Trend statements without supporting evidence must not be recorded.
-
-# 
-
-# \---
-
-# 
-
-# \## Timestamps
-
-# 
-
-# Observability records timestamps derived from harness execution metadata where available.
-
-# 
-
-# Timestamp formatting follows the resolved harness configuration.
-
-# 
-
-# This skill does not define:
-
-# 
-
-# ```text
-
-# Time Zone
-
-# Date/Time Format
-
-# Clock Source
-
-# Scheduling Mechanism
-
-# ```
-
-# 
-
-# Feature-specific or application-specific time behavior remains outside this skill.
-
-# 
-
-# \---
-
-# 
-
-# \## Escalation Recording
-
-# 
-
-# Observability records escalation status when the harness has determined escalation.
-
-# 
-
-# Canonical escalation evidence, when produced, is referenced as:
-
-# 
-
-# ```text
-
-# escalation.md
-
-# ```
-
-# 
-
-# For a recorded escalation, observability captures:
-
-# 
-
-# ```text
-
-# Run ID
-
-# Sprint ID
-
-# Contract ID
-
-# Iteration
-
-# Final Evaluator Verdict
-
-# Escalation Status
-
-# Escalation Evidence Reference
-
-# Timestamp
-
-# ```
-
-# 
-
-# Observability must not:
-
-# 
-
-# \- initiate escalation policy;
-
-# \- change the configured iteration limit;
-
-# \- authorize another Generator iteration;
-
-# \- resolve the escalation; or
-
-# \- modify escalation evidence.
-
-# 
-
-# \---
-
-# 
-
-# \## Evidence Preservation
-
-# 
-
-# Observability preserves the relationships among canonical execution artifacts.
-
-# 
-
-# The expected evidence relationship is:
-
-# 
-
-# ```text
-
-# resolved-config.yaml
-
-# spec.md
-
-# &#x20;   ↓
-
-# sprint-N-contract.md
-
-# &#x20;   ↓
-
-# generator-summary-iteration-1.md
-
-# &#x20;   ↓
-
-# evaluator-feedback-iteration-1.md
-
-# &#x20;   ↓
-
-# generator-summary-iteration-2.md (if applicable)
-
-# &#x20;   ↓
-
-# evaluator-feedback-iteration-2.md (if applicable)
-
-# &#x20;   ↓
-
-# run-log.md
-
-# &#x20;   ↓
-
-# escalation.md (if applicable)
-
-# ```
-
-# 
-
-# The harness determines output and archive locations.
-
-# 
-
-# This skill does not assume ownership of creating or relocating run-level artifacts such as:
-
-# 
-
-# ```text
-
-# resolved-config.yaml
-
-# spec.md
-
-# ```
-
-# 
-
-# unless the harness explicitly assigns that responsibility.
-
-# 
-
-# Observability records references to these artifacts rather than modifying them.
-
-# 
-
-# \---
-
-# 
-
-# \## Immutability
-
-# 
-
-# Observability must preserve auditability.
-
-# 
-
-# Do not:
-
-# 
-
-# \- overwrite prior iteration records;
-
-# \- alter Generator evidence;
-
-# \- alter Evaluator evidence;
-
-# \- alter escalation evidence;
-
-# \- delete prior evidence;
-
-# \- rewrite historical `run-log.md` entries;
-
-# \- change previously recorded verdicts; or
-
-# \- retroactively modify recorded metrics.
-
-# 
-
-# Corrections must be recorded as new evidence rather than as modifications to prior evidence.
-
-# 
-
-# Where the resolved configuration defines an immutable review archive, existing entries within that archive must remain unchanged after they are recorded.
-
-# 
-
-# \---
-
-# 
-
-# \## Downstream Evidence Use
-
-# 
-
-# Observability evidence supports governance traceability for downstream lifecycle activities.
-
-# 
-
-# The relationship is:
-
-# 
-
-# ```text
-
-# Observability Evidence
-
-# &#x20;   ↓
-
-# Audit / Traceability
-
-# ```
-
-# 
-
-# CI/CD remains an independent validation activity:
-
-# 
-
-# ```text
-
-# Committed Revision
-
-# &#x20;   ↓
-
-# CI/CD Independent Revalidation
-
-# ```
-
-# 
-
-# Observability evidence does not replace CI/CD verification.
-
-# 
-
-# Deployment, runtime validation, rollback, and reflection may reference governance evidence produced during the harness run, but this skill does not participate in those activities.
-
-# 
-
-# Deployment and rollback evidence remain owned by:
-
-# 
-
-# ```text
-
-# DEPLOYMENT.md
-
-# ```
-
-# 
-
-# Reflection remains owned by:
-
-# 
-
-# ```text
-
-# REFLECTION.md
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## Context Isolation
-
-# 
-
-# Observability requires only the context needed to record and reference governance-observability evidence.
-
-# 
-
-# Do not require:
-
-# 
-
-# \- the complete application source tree;
-
-# \- unrelated domain packs;
-
-# \- unrelated technology packs;
-
-# \- Generator internal reasoning beyond the current iteration evidence;
-
-# \- Evaluator internal reasoning beyond the current iteration evidence;
-
-# \- deployment evidence;
-
-# \- rollback evidence;
-
-# \- reflection content; or
-
-# \- an undefined persisted Run State artifact.
-
-# 
-
-# Harness execution metadata is authoritative for run, sprint, contract, iteration, verdict, and escalation state.
-
-# 
-
-# \---
-
-# 
-
-# \## Responsibility Boundaries
-
-# 
-
-# This skill supports Monitor reasoning only.
-
-# 
-
-# It does not authorize any agent to:
-
-# 
-
-# ```text
-
-# Plan Work
-
-# Generate Implementation
-
-# Modify Tests
-
-# Perform Remediation
-
-# Modify Contracts
-
-# Modify Configuration
-
-# Modify Governance Policy
-
-# Change Verdicts
-
-# Change Verdict Thresholds
-
-# Change Scoring Weights
-
-# Change Hard Gates
-
-# Change Coverage Thresholds
-
-# Change Iteration Limits
-
-# Authorize Retries
-
-# Initiate Escalation
-
-# Emit Orchestration Statuses
-
-# Execute CI/CD
-
-# Deploy
-
-# Perform Runtime Validation
-
-# Rollback
-
-# Reflect
-
-# ```
-
-# 
-
-# Monitor records governance-observability evidence.
-
-# 
-
-# The harness controls downstream routing.
-
-# 
-
-# \---
-
-# 
-
-# \## Configuration Ownership
-
-# 
-
-# This skill must not duplicate authoritative values owned elsewhere.
-
-# 
-
-# The following remain configuration- or governance-owned:
-
-# 
-
-# ```text
-
-# Application Paths
-
-# Technology Stack
-
-# Build Commands
-
-# Test Commands
-
-# Coverage Commands
-
-# Coverage Thresholds
-
-# Static Analysis Commands
-
-# Architecture Verification Commands
-
-# Security Commands
-
-# Hard Gates
-
-# Scoring Dimensions
-
-# Scoring Weights
-
-# PASS Threshold
-
-# CONDITIONAL\_PASS Threshold
-
-# Fail-Closed Policy
-
-# maxIterations
-
-# Approval Commands
-
-# Output Paths
-
-# Review Paths
-
-# Deployment Controls
-
-# Rollback Controls
-
-# ```
-
-# 
-
-# This skill defines:
-
-# 
-
-# ```text
-
-# Reusable Governance-Observability Guidance
-
-# ```
-
-# 
-
-# Configuration defines:
-
-# 
-
-# ```text
-
-# Applicable Runtime Values
-
-# ```
-
-# 
-
-# Governance policy defines:
-
-# 
-
-# ```text
-
-# Evaluation and Decision Policy
-
-# ```
-
-# 
-
-# Agent definitions and `CLAUDE.md` define:
-
-# 
-
-# ```text
-
-# Orchestration and Routing
-
-# ```
-
-# 
-
-# Evaluator evidence remains authoritative for:
-
-# 
-
-# ```text
-
-# Deterministic Quality Results
-
-# ```
-
-# 
-
-# This skill supports:
-
-# 
-
-# ```text
-
-# Recording
-
-# Referencing
-
-# Preserving
-
-# ```
-
-# 
-
-# authoritative evidence in support of audit, traceability, and reusability.
-
+authoritative evidence in support of audit, traceability, and reusability.
