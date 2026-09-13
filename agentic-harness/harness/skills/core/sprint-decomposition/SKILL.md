@@ -1,46 +1,24 @@
-# \# Sprint Decomposition
+# Sprint Decomposition
 
-# 
+## Purpose
 
-# \## Purpose
+Guide the Planner in decomposing a feature request into independently verifiable sprint contracts.
 
-# 
+## Rules
 
-# Guide the Planner in decomposing a feature request into independently verifiable sprint contracts.
+1. Sprint boundaries are Planner-derived.
+2. Any decomposition shown in design documentation is illustrative unless approved.
+3. Each sprint contract must be bounded, independently testable/evaluable, and architecture-aware.
+4. Each sprint contract must produce measurable acceptance criteria with unique identifiers.
+5. Sprints must trace back to the feature prompt.
+6. Sprints must reflect existing application patterns discovered during Planner discovery.
 
-# 
+## Acceptance Criteria
 
-# \## Rules
+Use the format:
 
-# 
-
-# 1\. Sprint boundaries are Planner-derived.
-
-# 2\. Any decomposition shown in design documentation is illustrative unless approved.
-
-# 3\. Each sprint contract must be bounded, independently testable/evaluable, and architecture-aware.
-
-# 4\. Each sprint contract must produce measurable acceptance criteria with unique identifiers.
-
-# 5\. Sprints must trace back to the feature prompt.
-
-# 6\. Sprints must reflect existing application patterns discovered during Planner discovery.
-
-# 
-
-# \## Acceptance Criteria
-
-# 
-
-# Use the format:
-
-# 
-
-# ```text
-
-# GIVEN
-
-# WHEN
-
-# THEN
-
+```text
+GIVEN
+WHEN
+THEN
+```
