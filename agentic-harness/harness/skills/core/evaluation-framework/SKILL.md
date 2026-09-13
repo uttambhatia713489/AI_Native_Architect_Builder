@@ -1,1066 +1,533 @@
-# \# Evaluation Framework
+# Evaluation Framework
 
-# 
+## Purpose
 
-# \## Purpose
+Provide reusable evaluation guidance for the governed agentic delivery harness.
 
-# 
+This skill defines the evaluation process and evidence expectations used by Evaluator.
 
-# Provide reusable evaluation guidance for the governed agentic delivery harness.
+It does not define application-specific architecture rules, technology-specific verification commands, governance thresholds, scoring weights, verdict thresholds, coverage thresholds, hard-gate values, or iteration limits.
 
-# 
+Those values are resolved from the active application, domain, technology, and governance configuration.
 
-# This skill defines the evaluation process and evidence expectations used by Evaluator.
+---
 
-# 
+## Evaluation Principles
 
-# It does not define application-specific architecture rules, technology-specific verification commands, governance thresholds, scoring weights, verdict thresholds, coverage thresholds, hard-gate values, or iteration limits.
+Evaluation must be:
 
-# 
+- independent of Generator self-assessment;
+- evidence-based;
+- deterministic where tooling can decide the outcome;
+- semantic only where deterministic checks cannot decide the outcome;
+- traceable to the approved sprint contract;
+- governed by the active governance policy; and
+- fail-closed where configured for mandatory checks.
 
-# Those values are resolved from the active application, domain, technology, and governance configuration.
+Generator self-assessment is informational evidence only.
 
-# 
+Evaluator independently determines compliance and the final verdict.
 
-# \---
+---
 
-# 
+## Evaluation Inputs
 
-# \## Evaluation Principles
+Evaluation is based on:
 
-# 
+```text
+Approved Sprint Contract
+Current Implementation
+Current Tests
+generator-summary-iteration-N.md
+Resolved Harness Configuration
+Applicable Architecture Rules
+Applicable Domain Rules
+Applicable Technology Verification Configuration
+Active Governance Policy
+```
 
-# Evaluation must be:
+The evaluation framework must not assume application-specific or technology-specific rules that are not present in the resolved context.
 
-# 
+---
 
-# \- independent of Generator self-assessment;
+## Evaluation Sequence
 
-# \- evidence-based;
+Execute deterministic checks before semantic review.
 
-# \- deterministic where tooling can decide the outcome;
+Where applicable and configured, use the following canonical sequence:
 
-# \- semantic only where deterministic checks cannot decide the outcome;
+```text
+1. Build
+2. Tests
+3. Coverage
+4. Static Analysis
+5. Architecture Checks
+6. Security Checks
+7. Acceptance Criteria
+8. Semantic Review
+9. Governance Evidence
+```
 
-# \- traceable to the approved sprint contract;
+A check that is not applicable or not configured must be recorded appropriately rather than silently treated as passed.
 
-# \- governed by the active governance policy; and
+Deterministic results take precedence over semantic reasoning.
 
-# \- fail-closed where configured for mandatory checks.
+---
 
-# 
+## Deterministic Checks
 
-# Generator self-assessment is informational evidence only.
+Deterministic checks may include:
 
-# 
+```text
+Build
+Tests
+Coverage
+Static Analysis
+Architecture Checks
+Security Checks
+Other Configured Verification
+```
 
-# Evaluator independently determines compliance and the final verdict.
+Commands, tools, thresholds, and mandatory status are resolved from the active technology configuration and governance policy.
 
-# 
+This skill does not define fixed commands or numeric thresholds.
 
-# \---
+Evaluator must not introduce alternative thresholds or weaken configured checks.
 
-# 
+---
 
-# \## Evaluation Inputs
+## Hard Gates
 
-# 
+Hard gates are defined by the active governance policy.
 
-# Evaluation is based on:
+A mandatory hard-gate failure results in:
 
-# 
+```text
+VERDICT: FAIL
+```
 
-# ```text
+A mandatory hard-gate failure must not be overridden by:
 
-# Approved Sprint Contract
+```text
+Weighted Score
+Semantic Judgment
+Generator Self-Assessment
+Non-Blocking Findings
+```
 
-# Current Implementation
+For each hard gate, record sufficient evidence to identify:
 
-# Current Tests
+```text
+Rule / Gate
+Configured Requirement
+Observed Result
+Status
+Evidence Reference
+```
 
-# generator-summary-iteration-N.md
+---
 
-# Resolved Harness Configuration
+## Acceptance-Criteria Evaluation
 
-# Applicable Architecture Rules
+Evaluator independently verifies every acceptance criterion defined by the approved sprint contract.
 
-# Applicable Domain Rules
+Use the unique acceptance-criterion identifiers established by Planner.
 
-# Applicable Technology Verification Configuration
+For each criterion, record:
 
-# Active Governance Policy
+```text
+Acceptance Criterion ID
+Required Behavior
+Verification Method
+Observed Result
+Status
+Evidence Reference
+```
 
-# ```
+Acceptance criteria must be evaluated against observable behavior and supporting evidence.
 
-# 
+Generator self-assessment must not be treated as proof that an acceptance criterion has passed.
 
-# The evaluation framework must not assume application-specific or technology-specific rules that are not present in the resolved context.
+Mandatory acceptance-criterion failures are handled according to the active governance policy and must not be overridden by weighted scoring.
 
-# 
+---
 
-# \---
+## Semantic Review
 
-# 
+Semantic review is used only for concerns that deterministic checks cannot fully decide.
 
-# \## Evaluation Sequence
+Examples may include:
 
-# 
+```text
+Business Intent Satisfaction
+Test Meaningfulness
+Semantic Architectural Coupling
+Implementation Consistency
+Consumer Context Sufficiency
+Remediation Quality
+```
 
-# Execute deterministic checks before semantic review.
+Semantic review must:
 
-# 
+- remain within the approved sprint contract;
+- use available evidence;
+- avoid unsupported assumptions;
+- avoid redefining business intent;
+- avoid introducing new architecture requirements; and
+- never override deterministic mandatory failures.
 
-# Where applicable and configured, use the following canonical sequence:
+---
 
-# 
+## Fail-Closed Evaluation
 
-# ```text
+Fail-closed behavior is controlled by the active governance policy.
 
-# 1\. Build
+When:
 
-# 2\. Tests
+```text
+failClosed: true
+```
 
-# 3\. Coverage
+and a mandatory check cannot be determined with sufficient evidence, record:
 
-# 4\. Static Analysis
+```text
+CHECK_STATUS: AMBIGUOUS
+```
 
-# 5\. Architecture Checks
+and identify:
 
-# 6\. Security Checks
+```text
+Rule
+Check
+Evidence Inspected
+Missing Evidence
+Required Action
+```
 
-# 7\. Acceptance Criteria
+For mandatory checks:
 
-# 8\. Semantic Review
+```text
+AMBIGUOUS
+   ↓
+FAIL
+```
 
-# 9\. Governance Evidence
+when required by the active fail-closed policy.
 
-# ```
+Evaluator must not infer or guess compliance when mandatory evidence is insufficient.
 
-# 
+---
 
-# A check that is not applicable or not configured must be recorded appropriately rather than silently treated as passed.
+## Weighted Evaluation
 
-# 
+Weighted scoring is used only when configured by the active governance policy.
 
-# Deterministic results take precedence over semantic reasoning.
+The governance policy owns:
 
-# 
+```text
+Evaluation Dimensions
+Scoring Weights
+PASS Threshold
+CONDITIONAL_PASS Threshold
+Other Verdict Thresholds
+```
 
-# \---
+This skill does not define fixed dimensions, weights, or thresholds.
 
-# 
+Weighted scoring occurs only after mandatory hard gates and mandatory acceptance criteria permit scoring.
 
-# \## Deterministic Checks
+Where weighted scoring is configured, Evaluator must validate the scoring model according to the active governance policy.
 
-# 
+If the configured scoring model is invalid:
 
-# Deterministic checks may include:
+```text
+CONFIGURATION ERROR
+```
 
-# 
+Evaluator must not silently normalize, correct, or substitute scoring weights.
 
-# ```text
+The active governance policy remains authoritative for scoring-model validity.
 
-# Build
+Weighted scoring must never override:
 
-# Tests
+```text
+Mandatory Hard-Gate Failure
+Mandatory Acceptance-Criterion Failure
+Fail-Closed Mandatory Failure
+```
 
-# Coverage
+---
 
-# Static Analysis
+## Verdicts
 
-# Architecture Checks
+Supported evaluation verdicts are:
 
-# Security Checks
+```text
+PASS
+CONDITIONAL_PASS
+FAIL
+```
 
-# Other Configured Verification
+Verdict thresholds and qualifying conditions are resolved from the active governance policy.
 
-# ```
+### PASS
 
-# 
+`PASS` may be returned only when:
 
-# Commands, tools, thresholds, and mandatory status are resolved from the active technology configuration and governance policy.
+- all mandatory hard gates pass;
+- all mandatory acceptance criteria pass;
+- no mandatory fail-closed condition remains; and
+- configured PASS conditions are satisfied.
 
-# 
+### CONDITIONAL_PASS
 
-# This skill does not define fixed commands or numeric thresholds.
+`CONDITIONAL_PASS` may be returned only when:
 
-# 
+- all mandatory hard gates pass;
+- all mandatory acceptance criteria pass;
+- no mandatory fail-closed condition remains;
+- configured CONDITIONAL_PASS conditions are satisfied; and
+- only permitted non-blocking findings remain.
 
-# Evaluator must not introduce alternative thresholds or weaken configured checks.
+`CONDITIONAL_PASS` does not require mandatory human intervention unless the active governance policy explicitly defines one.
 
-# 
+Recommendations associated with `CONDITIONAL_PASS` are informational governance evidence and are preserved through the harness evidence flow.
 
-# \---
+### FAIL
 
-# 
+`FAIL` is returned when required by the active governance policy, including mandatory hard-gate, mandatory acceptance-criterion, fail-closed, or configured scoring failures.
 
-# \## Hard Gates
+Evaluator determines the verdict.
 
-# 
+The harness determines retry, escalation, sprint progression, and run completion.
 
-# Hard gates are defined by the active governance policy.
+---
 
-# 
+## Findings
 
-# A mandatory hard-gate failure results in:
+Evaluation findings must be specific, evidence-based, and actionable.
 
-# 
+Every failed finding must include, where applicable:
 
-# ```text
+```text
+RULE
+CHECK
+FILE
+LINE
+OBSERVED
+EXPECTED
+REMEDIATION
+```
 
-# VERDICT: FAIL
+Where a file or line reference is not applicable, record:
 
-# ```
+```text
+N/A
+```
 
-# 
+and identify the relevant artifact, configuration, command, or evidence source.
 
-# A mandatory hard-gate failure must not be overridden by:
+Generic findings such as:
 
-# 
+```text
+Fix architecture
+Improve tests
+Fix quality
+```
 
-# ```text
+are not sufficient.
 
-# Weighted Score
+Remediation guidance must be specific enough for Generator to act without requiring scope expansion or reinterpretation of the approved contract.
 
-# Semantic Judgment
+---
 
-# Generator Self-Assessment
+## Tool Errors vs Compliance Failures
 
-# Non-Blocking Findings
+Evaluator must distinguish:
 
-# ```
+```text
+Tool Execution Error
+```
 
-# 
+from:
 
-# For each hard gate, record sufficient evidence to identify:
+```text
+Compliance Failure
+```
 
-# 
+A verification tool that cannot execute must not automatically be represented as proof that the implementation violated the corresponding rule.
 
-# ```text
+Record the actual tool outcome and apply the active governance policy, including fail-closed behavior where applicable.
 
-# Rule / Gate
+---
 
-# Configured Requirement
+## Implementation-Mechanism Neutrality
 
-# Observed Result
+Evaluation must verify the implementation mechanism approved through Planner discovery and the approved sprint contract.
 
-# Status
+This reusable skill must not prescribe:
 
-# Evidence Reference
+```text
+Event Bus
+Specific Domain Event
+Scheduler
+Direct Service Invocation
+Message Broker
+Polling
+```
 
-# ```
+or another implementation mechanism.
 
-# 
+Application-specific mechanism requirements are supplied by the active application/domain architecture context and approved sprint contract.
 
-# \---
+Evaluator must not penalize an implementation for failing to use a mechanism that was not required by the approved context.
 
-# 
+---
 
-# \## Acceptance-Criteria Evaluation
+## Evaluation Evidence
 
-# 
+Evaluator produces canonical iteration-specific evidence:
 
-# Evaluator independently verifies every acceptance criterion defined by the approved sprint contract.
+```text
+evaluator-feedback-iteration-N.md
+```
 
-# 
+The evidence must correspond to the same iteration as:
 
-# Use the unique acceptance-criterion identifiers established by Planner.
+```text
+generator-summary-iteration-N.md
+```
 
-# 
+Generic template filenames may be used as templates but must not be treated as runtime evidence.
 
-# For each criterion, record:
+Evaluation evidence must include:
 
-# 
+```text
+Run ID
+Sprint ID
+Contract ID
+Iteration
+Hard-Gate Results
+Acceptance-Criteria Results
+Findings
+Evaluation Scores (when configured)
+Verdict
+Required Remediation
+Evidence References
+Traceability to Approved Sprint Contract
+```
 
-# ```text
+Prior iteration evidence must not be overwritten.
 
-# Acceptance Criterion ID
+---
 
-# Required Behavior
+## Iteration Boundary
 
-# Verification Method
+Evaluator evaluates the current Generator iteration independently.
 
-# Observed Result
+When the verdict is:
 
-# Status
+```text
+FAIL
+```
 
-# Evidence Reference
+Evaluator provides actionable remediation evidence.
 
-# ```
+Evaluator does not determine:
 
-# 
+```text
+maxIterations
+Retry Authorization
+Escalation Policy
+```
 
-# Acceptance criteria must be evaluated against observable behavior and supporting evidence.
+Those responsibilities belong to the active governance policy and harness orchestration.
 
-# 
+When another iteration is authorized, the next evaluation produces:
 
-# Generator self-assessment must not be treated as proof that an acceptance criterion has passed.
+```text
+evaluator-feedback-iteration-(N+1).md
+```
 
-# 
+without overwriting prior evidence.
 
-# Mandatory acceptance-criterion failures are handled according to the active governance policy and must not be overridden by weighted scoring.
+---
 
-# 
+## Contract Boundary
 
-# \---
+Evaluator evaluates against the approved sprint contract.
 
-# 
+Evaluator must not:
 
-# \## Semantic Review
+- modify acceptance criteria;
+- expand sprint scope;
+- redefine business intent;
+- introduce new architecture requirements; or
+- silently compensate for a materially deficient contract.
 
-# 
+If evaluation identifies a material contract deficiency, Evaluator records the deficiency and required contract-change condition as actionable evidence.
 
-# Semantic review is used only for concerns that deterministic checks cannot fully decide.
+Contract changes are handled through the harness re-planning and approval workflow.
 
-# 
+---
 
-# Examples may include:
+## Responsibility Boundary
 
-# 
+This skill supports Evaluator reasoning only.
 
-# ```text
+It does not authorize Evaluator to:
 
-# Business Intent Satisfaction
+```text
+Plan Work
+Generate Implementation
+Modify Tests
+Perform Remediation
+Modify Contracts
+Modify Configuration
+Modify Governance Policy
+Authorize Retries
+Own maxIterations
+Initiate Escalation
+Archive Monitor Evidence
+Execute CI/CD
+Deploy
+Perform Runtime Validation
+Rollback
+Reflect
+```
 
-# Test Meaningfulness
+Evaluator produces evaluation evidence and a verdict.
 
-# Semantic Architectural Coupling
+The harness controls downstream routing.
 
-# Implementation Consistency
+---
 
-# Consumer Context Sufficiency
+## Configuration Ownership
 
-# Remediation Quality
+The following remain configuration-owned and must not be duplicated as authoritative values in this skill:
 
-# ```
+```text
+Build Commands
+Test Commands
+Coverage Commands
+Coverage Thresholds
+Static Analysis Commands
+Architecture Check Commands
+Security Check Commands
+Hard Gates
+Scoring Dimensions
+Scoring Weights
+PASS Threshold
+CONDITIONAL_PASS Threshold
+Fail-Closed Policy
+maxIterations
+Approval Commands
+Output Paths
+Review Paths
+Deployment Controls
+Rollback Controls
+```
 
-# 
+This skill defines **how evaluation is performed**.
 
-# Semantic review must:
-
-# 
-
-# \- remain within the approved sprint contract;
-
-# \- use available evidence;
-
-# \- avoid unsupported assumptions;
-
-# \- avoid redefining business intent;
-
-# \- avoid introducing new architecture requirements; and
-
-# \- never override deterministic mandatory failures.
-
-# 
-
-# \---
-
-# 
-
-# \## Fail-Closed Evaluation
-
-# 
-
-# Fail-closed behavior is controlled by the active governance policy.
-
-# 
-
-# When:
-
-# 
-
-# ```text
-
-# failClosed: true
-
-# ```
-
-# 
-
-# and a mandatory check cannot be determined with sufficient evidence, record:
-
-# 
-
-# ```text
-
-# CHECK\_STATUS: AMBIGUOUS
-
-# ```
-
-# 
-
-# and identify:
-
-# 
-
-# ```text
-
-# Rule
-
-# Check
-
-# Evidence Inspected
-
-# Missing Evidence
-
-# Required Action
-
-# ```
-
-# 
-
-# For mandatory checks:
-
-# 
-
-# ```text
-
-# AMBIGUOUS
-
-# &#x20;   ↓
-
-# FAIL
-
-# ```
-
-# 
-
-# when required by the active fail-closed policy.
-
-# 
-
-# Evaluator must not infer or guess compliance when mandatory evidence is insufficient.
-
-# 
-
-# \---
-
-# 
-
-# \## Weighted Evaluation
-
-# 
-
-# Weighted scoring is used only when configured by the active governance policy.
-
-# 
-
-# The governance policy owns:
-
-# 
-
-# ```text
-
-# Evaluation Dimensions
-
-# Scoring Weights
-
-# PASS Threshold
-
-# CONDITIONAL\_PASS Threshold
-
-# Other Verdict Thresholds
-
-# ```
-
-# 
-
-# This skill does not define fixed dimensions, weights, or thresholds.
-
-# 
-
-# Weighted scoring occurs only after mandatory hard gates and mandatory acceptance criteria permit scoring.
-
-# 
-
-# Where weighted scoring is configured, Evaluator must validate the scoring model according to the active governance policy.
-
-# 
-
-# If the configured scoring model is invalid:
-
-# 
-
-# ```text
-
-# CONFIGURATION ERROR
-
-# ```
-
-# 
-
-# Evaluator must not silently normalize, correct, or substitute scoring weights.
-
-# 
-
-# The active governance policy remains authoritative for scoring-model validity.
-
-# 
-
-# Weighted scoring must never override:
-
-# 
-
-# ```text
-
-# Mandatory Hard-Gate Failure
-
-# Mandatory Acceptance-Criterion Failure
-
-# Fail-Closed Mandatory Failure
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## Verdicts
-
-# 
-
-# Supported evaluation verdicts are:
-
-# 
-
-# ```text
-
-# PASS
-
-# CONDITIONAL\_PASS
-
-# FAIL
-
-# ```
-
-# 
-
-# Verdict thresholds and qualifying conditions are resolved from the active governance policy.
-
-# 
-
-# \### PASS
-
-# 
-
-# `PASS` may be returned only when:
-
-# 
-
-# \- all mandatory hard gates pass;
-
-# \- all mandatory acceptance criteria pass;
-
-# \- no mandatory fail-closed condition remains; and
-
-# \- configured PASS conditions are satisfied.
-
-# 
-
-# \### CONDITIONAL\_PASS
-
-# 
-
-# `CONDITIONAL\_PASS` may be returned only when:
-
-# 
-
-# \- all mandatory hard gates pass;
-
-# \- all mandatory acceptance criteria pass;
-
-# \- no mandatory fail-closed condition remains;
-
-# \- configured CONDITIONAL\_PASS conditions are satisfied; and
-
-# \- only permitted non-blocking findings remain.
-
-# 
-
-# `CONDITIONAL\_PASS` does not require mandatory human intervention unless the active governance policy explicitly defines one.
-
-# 
-
-# Recommendations associated with `CONDITIONAL\_PASS` are informational governance evidence and are preserved through the harness evidence flow.
-
-# 
-
-# \### FAIL
-
-# 
-
-# `FAIL` is returned when required by the active governance policy, including mandatory hard-gate, mandatory acceptance-criterion, fail-closed, or configured scoring failures.
-
-# 
-
-# Evaluator determines the verdict.
-
-# 
-
-# The harness determines retry, escalation, sprint progression, and run completion.
-
-# 
-
-# \---
-
-# 
-
-# \## Findings
-
-# 
-
-# Evaluation findings must be specific, evidence-based, and actionable.
-
-# 
-
-# Every failed finding must include, where applicable:
-
-# 
-
-# ```text
-
-# RULE
-
-# CHECK
-
-# FILE
-
-# LINE
-
-# OBSERVED
-
-# EXPECTED
-
-# REMEDIATION
-
-# ```
-
-# 
-
-# Where a file or line reference is not applicable, record:
-
-# 
-
-# ```text
-
-# N/A
-
-# ```
-
-# 
-
-# and identify the relevant artifact, configuration, command, or evidence source.
-
-# 
-
-# Generic findings such as:
-
-# 
-
-# ```text
-
-# Fix architecture
-
-# Improve tests
-
-# Fix quality
-
-# ```
-
-# 
-
-# are not sufficient.
-
-# 
-
-# Remediation guidance must be specific enough for Generator to act without requiring scope expansion or reinterpretation of the approved contract.
-
-# 
-
-# \---
-
-# 
-
-# \## Tool Errors vs Compliance Failures
-
-# 
-
-# Evaluator must distinguish:
-
-# 
-
-# ```text
-
-# Tool Execution Error
-
-# ```
-
-# 
-
-# from:
-
-# 
-
-# ```text
-
-# Compliance Failure
-
-# ```
-
-# 
-
-# A verification tool that cannot execute must not automatically be represented as proof that the implementation violated the corresponding rule.
-
-# 
-
-# Record the actual tool outcome and apply the active governance policy, including fail-closed behavior where applicable.
-
-# 
-
-# \---
-
-# 
-
-# \## Implementation-Mechanism Neutrality
-
-# 
-
-# Evaluation must verify the implementation mechanism approved through Planner discovery and the approved sprint contract.
-
-# 
-
-# This reusable skill must not prescribe:
-
-# 
-
-# ```text
-
-# Event Bus
-
-# Specific Domain Event
-
-# Scheduler
-
-# Direct Service Invocation
-
-# Message Broker
-
-# Polling
-
-# ```
-
-# 
-
-# or another implementation mechanism.
-
-# 
-
-# Application-specific mechanism requirements are supplied by the active application/domain architecture context and approved sprint contract.
-
-# 
-
-# Evaluator must not penalize an implementation for failing to use a mechanism that was not required by the approved context.
-
-# 
-
-# \---
-
-# 
-
-# \## Evaluation Evidence
-
-# 
-
-# Evaluator produces canonical iteration-specific evidence:
-
-# 
-
-# ```text
-
-# evaluator-feedback-iteration-N.md
-
-# ```
-
-# 
-
-# The evidence must correspond to the same iteration as:
-
-# 
-
-# ```text
-
-# generator-summary-iteration-N.md
-
-# ```
-
-# 
-
-# Generic template filenames may be used as templates but must not be treated as runtime evidence.
-
-# 
-
-# Evaluation evidence must include:
-
-# 
-
-# ```text
-
-# Run ID
-
-# Sprint ID
-
-# Contract ID
-
-# Iteration
-
-# Hard-Gate Results
-
-# Acceptance-Criteria Results
-
-# Findings
-
-# Evaluation Scores (when configured)
-
-# Verdict
-
-# Required Remediation
-
-# Evidence References
-
-# Traceability to Approved Sprint Contract
-
-# ```
-
-# 
-
-# Prior iteration evidence must not be overwritten.
-
-# 
-
-# \---
-
-# 
-
-# \## Iteration Boundary
-
-# 
-
-# Evaluator evaluates the current Generator iteration independently.
-
-# 
-
-# When the verdict is:
-
-# 
-
-# ```text
-
-# FAIL
-
-# ```
-
-# 
-
-# Evaluator provides actionable remediation evidence.
-
-# 
-
-# Evaluator does not determine:
-
-# 
-
-# ```text
-
-# maxIterations
-
-# Retry Authorization
-
-# Escalation Policy
-
-# ```
-
-# 
-
-# Those responsibilities belong to the active governance policy and harness orchestration.
-
-# 
-
-# When another iteration is authorized, the next evaluation produces:
-
-# 
-
-# ```text
-
-# evaluator-feedback-iteration-(N+1).md
-
-# ```
-
-# 
-
-# without overwriting prior evidence.
-
-# 
-
-# \---
-
-# 
-
-# \## Contract Boundary
-
-# 
-
-# Evaluator evaluates against the approved sprint contract.
-
-# 
-
-# Evaluator must not:
-
-# 
-
-# \- modify acceptance criteria;
-
-# \- expand sprint scope;
-
-# \- redefine business intent;
-
-# \- introduce new architecture requirements; or
-
-# \- silently compensate for a materially deficient contract.
-
-# 
-
-# If evaluation identifies a material contract deficiency, Evaluator records the deficiency and required contract-change condition as actionable evidence.
-
-# 
-
-# Contract changes are handled through the harness re-planning and approval workflow.
-
-# 
-
-# \---
-
-# 
-
-# \## Responsibility Boundary
-
-# 
-
-# This skill supports Evaluator reasoning only.
-
-# 
-
-# It does not authorize Evaluator to:
-
-# 
-
-# ```text
-
-# Plan Work
-
-# Generate Implementation
-
-# Modify Tests
-
-# Perform Remediation
-
-# Modify Contracts
-
-# Modify Configuration
-
-# Modify Governance Policy
-
-# Authorize Retries
-
-# Own maxIterations
-
-# Initiate Escalation
-
-# Archive Monitor Evidence
-
-# Execute CI/CD
-
-# Deploy
-
-# Perform Runtime Validation
-
-# Rollback
-
-# Reflect
-
-# ```
-
-# 
-
-# Evaluator produces evaluation evidence and a verdict.
-
-# 
-
-# The harness controls downstream routing.
-
-# 
-
-# \---
-
-# 
-
-# \## Configuration Ownership
-
-# 
-
-# The following remain configuration-owned and must not be duplicated as authoritative values in this skill:
-
-# 
-
-# ```text
-
-# Build Commands
-
-# Test Commands
-
-# Coverage Commands
-
-# Coverage Thresholds
-
-# Static Analysis Commands
-
-# Architecture Check Commands
-
-# Security Check Commands
-
-# Hard Gates
-
-# Scoring Dimensions
-
-# Scoring Weights
-
-# PASS Threshold
-
-# CONDITIONAL\_PASS Threshold
-
-# Fail-Closed Policy
-
-# maxIterations
-
-# Approval Commands
-
-# Output Paths
-
-# Review Paths
-
-# Deployment Controls
-
-# Rollback Controls
-
-# ```
-
-# 
-
-# This skill defines \*\*how evaluation is performed\*\*.
-
-# 
-
-# Configuration defines \*\*which rules, commands, thresholds, and policies apply\*\*.
-
+Configuration defines **which rules, commands, thresholds, and policies apply**.
