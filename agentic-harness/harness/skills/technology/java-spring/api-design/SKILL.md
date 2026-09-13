@@ -1,5 +1,5 @@
-Java/Spring API Design
-Purpose
+# Java/Spring API Design
+## Purpose
 Provide reusable Java/Spring API-design guidance for the harness agents that consume technology-implementation guidance: Generator and, where applicable, Evaluator.
 This skill applies when the active technology profile identifies Java/Spring as the technology stack.
 It focuses on API design at the code and contract level for the API style selected by the active technology profile.
