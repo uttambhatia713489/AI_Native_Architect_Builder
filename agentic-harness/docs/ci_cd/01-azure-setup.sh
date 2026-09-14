@@ -6,12 +6,12 @@
 set -euo pipefail
 
 # ---- Customize these ----
-RESOURCE_GROUP="storeops-rg"
+RESOURCE_GROUP="rg-azuser8168_mml.local-IxXPn"
 LOCATION="centralindia"                 # pick a region close to Pune, e.g. centralindia / southindia
 APP_SERVICE_PLAN="storeops-plan"
 WEBAPP_NAME="storeops-app"              # must be globally unique; becomes storeops-app.azurewebsites.net
 JAVA_RUNTIME="JAVA|21-java21"           # Java 21 (matches your Spring Boot 3.x stack); use 17-java17 if on Java 17
-SKU="P0V3"                              # Premium v3 tier for prod; use B1 for dev/test
+SKU="B1"                              # Premium v3 tier for prod; use B1 for dev/test
 
 # 1. Resource group
 az group create \
