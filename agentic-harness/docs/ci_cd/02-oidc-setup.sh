@@ -5,7 +5,7 @@
 # ---------------------------------------------------------------------------
 set -euo pipefail
 
-RESOURCE_GROUP="storeops-rg"
+RESOURCE_GROUP="rg-azuser8168_mml.local-IxXPn"
 APP_DISPLAY_NAME="github-storeops-deploy"
 GITHUB_ORG="uttambhatia713489"
 GITHUB_REPO="agentic_harness"
