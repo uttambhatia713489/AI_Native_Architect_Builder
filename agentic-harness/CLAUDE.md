@@ -564,9 +564,13 @@ Controller → Service → Repository
 
 Cross-Module Repository Access = Prohibited
 
-Cross-Module Reads = Service Only
+For the StoreOps reference profile these resolve from:
 
-Cross-Module Side Effects = Event Bus Only
+Active Domain Architecture Skill
++
+Existing StoreOps Evidence
++
+Approved Sprint Contract where feature-specific
 
 Reports = Read Only
 
