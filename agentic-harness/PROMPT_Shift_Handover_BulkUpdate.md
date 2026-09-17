@@ -362,7 +362,7 @@ An audit entry must not claim a status update that did not succeed.
 | All requested updates are valid | All approved activities are updated and each successful update has required audit evidence |
 | Valid `DONE` transition | Activity is updated according to existing lifecycle rules |
 | Valid `BLOCKED` transition | Activity is updated according to existing lifecycle rules |
-| Mixed valid and invalid items | Valid items and invalid items receive independently traceable outcomes according to approved transaction semantics |
+| Mixed valid and invalid items | Valid and invalid items receive independently traceable outcomes according to approved transaction semantics |
 | Unknown activity | That item fails without creating or modifying an activity |
 | Unauthorized request/item | Update is rejected according to existing authorization behavior |
 | Prohibited transition | Activity remains unchanged and established error behavior applies |
@@ -440,17 +440,11 @@ Do not introduce:
 
 ```text
 Controller → Repository
-
 Direct Cross-Module Repository Access
-
 Dependency on Another Module's Internals
-
 Duplicate Audit Infrastructure
-
 Unapproved Cross-Module Side Effect
-
 New Identity / Authorization Platform
-
 Broad Activity-Lifecycle Refactoring
 ```
 
@@ -705,7 +699,7 @@ Dependencies
 Risks
 ```
 
-Each sprint contract should capture the mandatory structure defined by the active sprint-contract template.
+Each sprint contract must use the mandatory structure defined by the active sprint-contract template.
 
 The Planner must not begin implementation.
 
