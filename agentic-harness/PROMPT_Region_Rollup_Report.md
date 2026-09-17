@@ -790,7 +790,7 @@ Dependencies
 Risks
 ```
 
-Each sprint contract should capture the mandatory structure defined by the active sprint-contract template.
+Each sprint contract must use the mandatory structure defined by the active sprint-contract template.
 
 The Planner must not begin implementation.
 
