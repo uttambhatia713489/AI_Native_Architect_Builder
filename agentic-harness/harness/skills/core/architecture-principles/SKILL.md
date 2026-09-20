@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provide reusable architectural reasoning shared by all agents in the governed agentic delivery harness.
+Provide reusable architectural reasoning shared by Planner, Generator, and Evaluator in the governed agentic delivery harness.
 
 This skill does not encode application-specific or technology-specific rules. Those rules are supplied by the active application, domain, technology, and governance configuration.
 
@@ -22,3 +22,7 @@ This skill does not encode application-specific or technology-specific rules. Th
 Application-specific architecture rules are supplied by the active application configuration and active domain architecture skill.
 
 This skill does not enumerate them.
+
+## Agent Scope
+
+Monitor does not load this skill. Monitor's context is scoped to governance-observability inputs only (see .harness/agents/monitor.agent.md and skills/core/observability/SKILL.md); it has no dependency on architectural reasoning.
