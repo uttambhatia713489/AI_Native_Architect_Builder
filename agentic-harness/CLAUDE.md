@@ -345,13 +345,15 @@ Technology Configuration
 Load:
 
 ```text
-Run State
-Sprint Contract
+Approved Sprint Contract
 generator-summary-iteration-N.md
 evaluator-feedback-iteration-N.md
+Resolved Configuration Reference
+Harness Execution Metadata (Run ID, Sprint ID, Contract ID, Current Iteration, Iterations Used, Current Sprint Status, Timestamps, Token Usage/Estimated Cost when available)
 Observability Configuration
 Observability Skill
 ```
+Monitor must not depend on an undefined persisted Run State artifact. Canonical durable evidence and harness-provided execution metadata are authoritative.
 
 Do not automatically load:
 
@@ -843,15 +845,22 @@ Record:
 Run ID
 Sprint ID
 Contract ID
-Final Verdict
-Iterations Used
+Iteration Number
+Evaluator Verdict
+Findings Summary or Reference
+Available Quality Evidence (Coverage Result, Architecture Violations, Quality Violations, when available)
 Escalation Status
-Architecture Violations
-Quality Violations
-Coverage Result
-Token Usage if Available
-Estimated Cost if Available
-Quality Trend
+Timestamp
+Generator Evidence Reference
+Evaluator Evidence Reference
+```
+
+When the harness determines that the sprint has concluded, additionally record the final sprint outcome:
+```text
+Iterations Used
+Final Evaluator Verdict
+Escalation Status
+Evidence References
 Timestamp
 ```
 
@@ -860,6 +869,8 @@ Create:
 ```text
 run-log.md
 ```
+
+Monitor does not independently determine evaluation outcomes, escalation policy, or sprint completion — those are determined by Evaluator and the harness. See .harness/agents/monitor.agent.md for the full agent definition.
 
 ---
 
