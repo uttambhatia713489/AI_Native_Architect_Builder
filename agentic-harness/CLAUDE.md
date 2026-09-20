@@ -553,10 +553,11 @@ Application-specific architecture rules come from:
 
 ```text
 Active Domain Architecture Skill
-+
+        +
 Existing Application Evidence
-+
+        +
 Approved Sprint Contract where feature-specific
+
 ```
 
 For the StoreOps reference profile these may resolve to:
@@ -566,20 +567,16 @@ Controller → Service → Repository
 
 Cross-Module Repository Access = Prohibited
 
-For the StoreOps reference profile these resolve from:
+Cross-Module Reads = Service Only
 
-Active Domain Architecture Skill
-+
-Existing StoreOps Evidence
-+
-Approved Sprint Contract where feature-specific
+Cross-Module Side Effects = Established Business Event, Approved Application Interface, Scheduled Processing, or Another Existing StoreOps Pattern (mechanism is not automatically Event Bus; it is determined through Planner discovery and approved via the sprint contract)
 
 Reports = Read Only
 
 Error Contract = AppError
 ```
 
-These are StoreOps reference rules, not universal harness rules.
+These are StoreOps reference rules, not universal harness rules. See domains/storeops/architecture-rules/SKILL.md for the authoritative constraint and its full set of possible cross-module mechanisms.
 
 ---
 
